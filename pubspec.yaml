@@ -37,7 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   supabase_flutter: ^1.10.25
   flutter_dotenv: ^5.1.0
-
+  get: ^4.6.6
+  flutter_riverpod: ^2.4.8
 dev_dependencies:
   flutter_test:
     sdk: flutter

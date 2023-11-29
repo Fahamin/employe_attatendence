@@ -1,14 +1,19 @@
+import 'package:employe_attatendence/route/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 
-class LoginScreen extends StatefulWidget {
+import '../services/auth_service.dart';
+
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   var emailControler = TextEditingController();
   var passwordControler = TextEditingController();
 
@@ -18,6 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
     var screenHight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.redAccent,
+      ),
       body: Column(
         children: [
           Container(
@@ -82,7 +90,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 50,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (emailControler.text.isNotEmpty &&
+                          passwordControler.text.isNotEmpty) {
+                        ref.read(authProvider.notifier).loginEmploye(
+                            emailControler.text.trim(),
+                            passwordControler.text.trim(),
+                            context);
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.redAccent,
                       shape: RoundedRectangleBorder(
@@ -97,7 +113,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                TextButton(onPressed: (){}, child: Text("No Account?Register Here"))
+                TextButton(
+                    onPressed: () {
+                      Get.toNamed(Routes.registration);
+                    },
+                    child: Text("No Account?Register Here"))
               ],
             ),
           ),

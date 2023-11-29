@@ -1,18 +1,17 @@
+import 'package:employe_attatendence/route/routes.dart';
 import 'package:employe_attatendence/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'constants/constance.dart';
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  /*await dotenv.load();
-  var supabaseUrl = dotenv.env['SUPABASE_URL']!;
-  var supabaseKey = dotenv.env['SUPABASE_key']!;*/
-  
-  await Supabase.initialize(url: SUPABASE_URL, anonKey: SUPABASE_KEY);
-  runApp(const MyApp());
+  Supabase.initialize(url: SUPABASE_URL, anonKey: SUPABASE_KEY);
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -21,15 +20,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Attendance System',
-      theme: ThemeData(
+    return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Attendance System',
+        initialRoute: Routes.homePage,
+        getPages: appRoutes());
 
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: LoginScreen()
-    );
   }
 }

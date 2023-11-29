@@ -1,19 +1,22 @@
+import 'package:employe_attatendence/services/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RegisterScreen extends StatelessWidget {
-  RegisterScreen({super.key});
+class RegistrationScreen extends ConsumerWidget {
+  RegistrationScreen({super.key});
 
   var emailControler = TextEditingController();
   var passwordControler = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     var screenWitdth = MediaQuery.of(context).size.width;
     var screenHight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
+        title: Text("Registration"),centerTitle: true,
         backgroundColor: Colors.redAccent,
       ),
       body: Column(
@@ -80,18 +83,26 @@ class RegisterScreen extends StatelessWidget {
                   height: 50,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (emailControler.text.isNotEmpty &&
+                          passwordControler.text.isNotEmpty) {
+                        ref.read(authProvider.notifier).registerEmploye(
+                            emailControler.text.trim(),
+                            passwordControler.text.trim(),
+                            context);
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.redAccent,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30)),
                     ),
                     child: Text(
-                      "Register",
+                      "Login",
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
