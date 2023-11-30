@@ -14,8 +14,8 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  var emailControler = TextEditingController();
-  var passwordControler = TextEditingController();
+  var emailControler = TextEditingController(text: "fahim@gmail.com");
+  var passwordControler = TextEditingController(text: "111");
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +23,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     var screenHight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
       ),
@@ -61,64 +62,66 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
           Padding(
             padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    label: Text("Email ID"),
-                    prefixIcon: Icon(Icons.email),
-                    border: OutlineInputBorder(),
-                  ),
-                  controller: emailControler,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    label: Text("Password"),
-                    prefixIcon: Icon(Icons.password),
-                    border: OutlineInputBorder(),
-                  ),
-                  controller: passwordControler,
-                  obscureText: true,
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (emailControler.text.isNotEmpty &&
-                          passwordControler.text.isNotEmpty) {
-                        ref.read(authProvider.notifier).loginEmploye(
-                            emailControler.text.trim(),
-                            passwordControler.text.trim(),
-                            context);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
+            child: Expanded(
+              child: Column(
+                children: [
+                  TextField(
+                    decoration: InputDecoration(
+                      label: Text("Email ID"),
+                      prefixIcon: Icon(Icons.email),
+                      border: OutlineInputBorder(),
                     ),
-                    child: Text(
-                      "Login",
-                      style: TextStyle(fontSize: 20),
+                    controller: emailControler,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      label: Text("Password"),
+                      prefixIcon: Icon(Icons.password),
+                      border: OutlineInputBorder(),
+                    ),
+                    controller: passwordControler,
+                    obscureText: true,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (emailControler.text.isNotEmpty &&
+                            passwordControler.text.isNotEmpty) {
+                          ref.read(authProvider.notifier).loginEmploye(
+                              emailControler.text.trim(),
+                              passwordControler.text.trim(),
+                              context);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                      ),
+                      child: Text(
+                        "Login",
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextButton(
-                    onPressed: () {
-                      Get.toNamed(Routes.registration);
-                    },
-                    child: Text("No Account?Register Here"))
-              ],
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Get.toNamed(Routes.registration);
+                      },
+                      child: Text("No Account?Register Here"))
+                ],
+              ),
             ),
           ),
         ],

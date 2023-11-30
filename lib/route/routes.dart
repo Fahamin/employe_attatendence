@@ -1,8 +1,8 @@
 import 'package:employe_attatendence/screen/login_screen.dart';
+import 'package:employe_attatendence/screen/main_page.dart';
 import 'package:employe_attatendence/screen/regestrer_screen.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
-
 
 class Routes {
   static String homePage = '/homepage';
@@ -11,7 +11,7 @@ class Routes {
 
   static String mainScreen = '/mainpage';
 
-  static String country = '/country';
+  static String country = '/mainpage';
 
   static String registration = '/registration';
 
@@ -38,6 +38,12 @@ appRoutes() => [
       GetPage(
         name: Routes.registration,
         page: () => RegistrationScreen(),
+        transition: Transition.leftToRightWithFade,
+        transitionDuration: Duration(milliseconds: 500),
+      ),
+      GetPage(
+        name: Routes.country,
+        page: () => MainPage(),
         transition: Transition.leftToRightWithFade,
         transitionDuration: Duration(milliseconds: 500),
       )

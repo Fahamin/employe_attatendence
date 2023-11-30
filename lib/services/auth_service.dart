@@ -1,25 +1,34 @@
+import 'package:employe_attatendence/route/routes.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../model/auth_model.dart';
 
-final authProvider = StateNotifierProvider<AuthNotifier, AuthModel>((ref) {
+final authProvider = StateNotifierProvider<AuthNotifier, AuthResponse>((ref) {
   return AuthNotifier();
 });
 
-class AuthNotifier extends StateNotifier<AuthModel> {
-  AuthNotifier() : super(AuthModel());
+class AuthNotifier extends StateNotifier<AuthResponse> {
+  AuthNotifier() : super(AuthResponse());
   final SupabaseClient _supabaseClient = Supabase.instance.client;
 
   Future registerEmploye(var email, var pass, BuildContext context) async {
     try {
       AuthResponse response =
-          await _supabaseClient.auth.signUp(password: pass, email: email);
+          await _supabaseClient.auth.signUp( email: email,password: pass,);
 
+      if (response.user!.email!.isNotEmpty) {
+        Get.toNamed(Routes.country);
+      }else{
+        Fluttertoast.showToast(
+            msg: "not singup",
 
-
+        );
+      }
     } catch (e) {}
   }
 
@@ -27,6 +36,9 @@ class AuthNotifier extends StateNotifier<AuthModel> {
     try {
       AuthResponse response = await _supabaseClient.auth
           .signInWithPassword(password: pass, email: email);
+      if (response.user!.email!.isNotEmpty) {
+        Get.toNamed(Routes.country);
+      }
     } catch (e) {}
   }
 

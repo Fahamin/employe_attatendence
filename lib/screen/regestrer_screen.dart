@@ -2,6 +2,7 @@ import 'package:employe_attatendence/services/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RegistrationScreen extends ConsumerWidget {
   RegistrationScreen({super.key});
@@ -15,8 +16,10 @@ class RegistrationScreen extends ConsumerWidget {
     var screenHight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Registration"),centerTitle: true,
+        title: Text("Registration"),
+        centerTitle: true,
         backgroundColor: Colors.redAccent,
       ),
       body: Column(
@@ -54,56 +57,62 @@ class RegistrationScreen extends ConsumerWidget {
           ),
           Padding(
             padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    label: Text("Email ID"),
-                    prefixIcon: Icon(Icons.email),
-                    border: OutlineInputBorder(),
-                  ),
-                  controller: emailControler,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    label: Text("Password"),
-                    prefixIcon: Icon(Icons.password),
-                    border: OutlineInputBorder(),
-                  ),
-                  controller: passwordControler,
-                  obscureText: true,
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (emailControler.text.isNotEmpty &&
-                          passwordControler.text.isNotEmpty) {
-                        ref.read(authProvider.notifier).registerEmploye(
-                            emailControler.text.trim(),
-                            passwordControler.text.trim(),
-                            context);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
+            child: Expanded(
+              child: Column(
+                children: [
+                  TextField(
+                    decoration: InputDecoration(
+                      label: Text("Email ID"),
+                      prefixIcon: Icon(Icons.email),
+                      border: OutlineInputBorder(),
                     ),
-                    child: Text(
-                      "Login",
-                      style: TextStyle(fontSize: 20),
+                    controller: emailControler,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      label: Text("Password"),
+                      prefixIcon: Icon(Icons.password),
+                      border: OutlineInputBorder(),
+                    ),
+                    controller: passwordControler,
+                    obscureText: true,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (emailControler.text.isNotEmpty &&
+                            passwordControler.text.isNotEmpty) {
+                          ref.read(authProvider.notifier).registerEmploye(
+                              emailControler.text.trim(),
+                              passwordControler.text.trim(),
+                              context);
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: "not singup",
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                      ),
+                      child: Text(
+                        "Sing UP",
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
