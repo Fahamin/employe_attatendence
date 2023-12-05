@@ -11,7 +11,7 @@ class Routes {
 
   static String mainScreen = '/mainpage';
 
-  static String country = '/mainpage';
+  static String mainPage = '/mainpage';
 
   static String registration = '/registration';
 
@@ -32,19 +32,19 @@ appRoutes() => [
       GetPage(
         name: Routes.homePage,
         page: () => LoginScreen(),
-        transition: Transition.leftToRightWithFade,
+        transition: Transition.rightToLeftWithFade,
         transitionDuration: Duration(milliseconds: 500),
       ),
       GetPage(
         name: Routes.registration,
         page: () => RegistrationScreen(),
-        transition: Transition.leftToRightWithFade,
+        transition: Transition.rightToLeftWithFade,
         transitionDuration: Duration(milliseconds: 500),
       ),
       GetPage(
-        name: Routes.country,
+        name: Routes.mainPage,
         page: () => MainPage(),
-        transition: Transition.leftToRightWithFade,
+        transition: Transition.rightToLeftWithFade,
         transitionDuration: Duration(milliseconds: 500),
       )
     ];

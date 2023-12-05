@@ -3,12 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../route/routes.dart';
+import '../services/db_service.dart';
 
 class RegistrationScreen extends ConsumerWidget {
   RegistrationScreen({super.key});
 
   var emailControler = TextEditingController();
   var passwordControler = TextEditingController();
+  final SupabaseClient _supabaseClient = Supabase.instance.client;
+  final DbService dbService = DbService();
 
   @override
   Widget build(BuildContext context, ref) {
@@ -73,7 +81,7 @@ class RegistrationScreen extends ConsumerWidget {
                   ),
                   TextField(
                     decoration: InputDecoration(
-                      label: Text("Password"),
+                      label: Text("Password at least 6 digit"),
                       prefixIcon: Icon(Icons.password),
                       border: OutlineInputBorder(),
                     ),
@@ -87,13 +95,27 @@ class RegistrationScreen extends ConsumerWidget {
                     height: 50,
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (emailControler.text.isNotEmpty &&
                             passwordControler.text.isNotEmpty) {
-                          ref.read(authProvider.notifier).registerEmploye(
+                         /* ref.read(authProvider.notifier).registerEmploye(
                               emailControler.text.trim(),
                               passwordControler.text.trim(),
-                              context);
+                              context);*/
+
+                          AuthResponse response = await _supabaseClient.auth.signUp(
+                            email: emailControler.text,
+                            password: passwordControler.text,
+                          );
+
+                          if (response.user!.email!.isNotEmpty) {
+                            await dbService.insertUser(emailControler.text, response.user!.id);
+                            Get.toNamed(Routes.mainPage);
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "not singup",
+                            );
+                          }
                         } else {
                           Fluttertoast.showToast(
                             msg: "not singup",
