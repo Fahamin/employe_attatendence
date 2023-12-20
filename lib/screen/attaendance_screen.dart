@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:slide_to_act/slide_to_act.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../model/user_model.dart';
+import '../services/db_service.dart';
 
 class AttendanceScreen extends StatelessWidget {
   const AttendanceScreen({super.key});
@@ -8,7 +13,10 @@ class AttendanceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GlobalKey<SlideActionState> key = GlobalKey<SlideActionState>();
+    final DbService dbService = DbService();
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(9),
         child: Column(
@@ -21,13 +29,28 @@ class AttendanceScreen extends StatelessWidget {
                 style: TextStyle(color: Colors.redAccent, fontSize: 32),
               ),
             ),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Employee Name",
-                style: TextStyle(color: Colors.redAccent, fontSize: 25),
-              ),
-            ),
+            FutureBuilder(
+                future: dbService.getUserData(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    UserModel? model = snapshot.data;
+                    return Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        model!.name != ''
+                            ? model.name.toString()
+                            : "##${model.employeeID.toString()}",
+                        style: TextStyle(color: Colors.redAccent, fontSize: 25),
+                      ),
+                    );
+                  } else {
+                    return Container(
+                      child: Center(
+                        child: LinearProgressIndicator(),
+                      ),
+                    );
+                  }
+                }),
             Container(
               alignment: Alignment.centerLeft,
               margin: EdgeInsets.only(top: 33),
@@ -97,16 +120,22 @@ class AttendanceScreen extends StatelessWidget {
               margin: EdgeInsets.only(top: 33),
               alignment: Alignment.centerLeft,
               child: Text(
-                "5th april 2023",
+               DateFormat("dd MMMM yyyy").format(DateTime.now()),
                 style: TextStyle(fontSize: 20),
               ),
             ),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "20:00: PM",
-                style: TextStyle(fontSize: 20, color: Colors.black54),
-              ),
+            StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 1)),
+              builder: (context, snapshot) {
+                return Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                      DateFormat("HH:MM:SS").format(DateTime.now()),
+                      
+                    style: TextStyle(fontSize: 20, color: Colors.black54),
+                  ),
+                );
+              }
             ),
             Container(
               margin: EdgeInsets.all(25),
